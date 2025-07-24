@@ -32,6 +32,9 @@ const Home = () => {
         <button onClick={() => navigate('/register-user')} className="nav-button">
           Register User
         </button>
+         <button onClick={() => navigate('/pending-transactions')} className="nav-button">
+          Check Status
+        </button>
       </div>
 
       <div className="fund-list-section">
