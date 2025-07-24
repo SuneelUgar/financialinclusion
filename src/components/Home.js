@@ -1,38 +1,47 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Home.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
 
   // Dummy list of funds for example
   const funds = [
-    { id: 1, name: 'Alpha Chit Fund' },
-    { id: 2, name: 'Beta Chit Group' },
-    { id: 3, name: 'Gamma Finance Club' }
+    { id: 1, name: "Alpha Chit Fund" },
+    { id: 2, name: "Beta Chit Group" },
+    { id: 3, name: "Gamma Finance Club" },
   ];
 
-  const goToFundDetails = (id) => {
-    navigate(`/fund/${id}`);
+  const goToParticipants = (id) => {
+    navigate(`/participants`);
   };
 
   return (
     <div className="home-container">
-     <div className="app-bar">
-  <div className="title-wrapper">
-    <span className="app-title">CHIT FUND APPLICATION</span>
-  </div>
-  <img src="assets/mylogo1.jpg" alt="Logo" className="app-logo" />
-</div>
+      <div className="app-bar">
+        <div className="title-wrapper">
+          <span className="app-title">CHIT FUND APPLICATION</span>
+        </div>
+        <img src="assets/mylogo1.jpg" alt="Logo" className="app-logo" />
+      </div>
 
       <div className="button-section">
-        <button onClick={() => navigate('/register-chit-fund')} className="nav-button">
+        <button
+          onClick={() => navigate("/register-chit-fund")}
+          className="nav-button"
+        >
           Register Chit Fund
         </button>
-        <button onClick={() => navigate('/register-user')} className="nav-button">
+        <button
+          onClick={() => navigate("/register-user")}
+          className="nav-button"
+        >
           Register User
         </button>
-         <button onClick={() => navigate('/pending-transactions')} className="nav-button">
+        <button
+          onClick={() => navigate("/pending-transactions")}
+          className="nav-button"
+        >
           Check Status
         </button>
       </div>
@@ -44,7 +53,7 @@ const Home = () => {
             <li
               key={fund.id}
               className="fund-item"
-              onClick={() => goToFundDetails(fund.id)}
+              onClick={() => goToParticipants(fund.id)}
             >
               {fund.name}
             </li>
