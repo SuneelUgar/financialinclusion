@@ -4,6 +4,8 @@ import Home from './components/Home';
 import RegisterChitFund from './components/RegisterChitFund';
 import RegisterUser from './components/RegisterUser';
 import FundDetails from './FundDetails';
+import PendingTransactions from './components/PendingTransactions';
+import BlockDetails from './components/BlockDetails';
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/register-chit-fund" element={<RegisterChitFund />} />
         <Route path="/register-user" element={<RegisterUser />} />
         <Route path="/fund/:id" element={<FundDetails />} />
+        <Route path="/pending-transactions" element={<PendingTransactions />} />
+        <Route path="/blocks/:blockId" element={<BlockDetails />} />
       </Routes>
     </Router>
   );
