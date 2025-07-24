@@ -1,42 +1,60 @@
-import React, { useState } from 'react';
-import './RegisterUser.css';
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button,
+  Box,
+} from "@mui/material";
 
-const RegisterUser = () => {
-  const [username, setUsername] = useState('');
-  const [pan, setPan] = useState('');
+const RegisterUser = ({ open, onClose, onSubmit }) => {
+  const [username, setUsername] = useState("");
+  const [pan, setPan] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('User registered:', { username, pan });
+  const handleSubmit = () => {
+    onSubmit({ username: username.trim(), pan: pan.trim() });
+    setUsername("");
+    setPan("");
+    onClose();
   };
 
   return (
-    <div className="user-register-container">
-      <h2 className="form-title">👤 Register User</h2>
-      <form className="user-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username:</label>
-          <input
-            type="text"
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>👤 Register User</DialogTitle>
+      <DialogContent>
+        <Box mt={2} display="flex" flexDirection="column" gap={2}>
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            placeholder="Enter username"
           />
-        </div>
-        <div className="form-group">
-          <label>PAN Card:</label>
-          <input
-            type="text"
+          <TextField
+            label="PAN Card"
+            variant="outlined"
+            fullWidth
             value={pan}
             onChange={(e) => setPan(e.target.value)}
             required
-            placeholder="Enter PAN"
           />
-        </div>
-        <button type="submit" className="submit-button">Submit</button>
-      </form>
-    </div>
+        </Box>
+        <Box mt={3} display="flex" justifyContent="flex-end">
+          <Button onClick={onClose} sx={{ mr: 2 }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={!username.trim() || !pan.trim()}
+          >
+            Submit
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 };
 

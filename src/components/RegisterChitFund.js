@@ -1,26 +1,51 @@
-import React, { useState } from 'react';
-import './RegisterChitFund.css';
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button,
+  Box,
+} from "@mui/material";
 
-const RegisterChitFund = () => {
-  const [selectedFund, setSelectedFund] = useState('');
+const RegisterChitFund = ({ open, onClose, onSubmit }) => {
+  const [fundName, setFundName] = useState("");
+
+  const handleSubmit = () => {
+    if (fundName.trim()) {
+      onSubmit(fundName.trim());
+      setFundName("");
+      onClose();
+    }
+  };
 
   return (
-    <div className="register-container">
-      <h2 className="register-title">📋 Register Chit Fund</h2>
-      <div className="form-group">
-        <label htmlFor="fund-select">Select Fund:</label>
-        <select
-          id="fund-select"
-          value={selectedFund}
-          onChange={(e) => setSelectedFund(e.target.value)}
-        >
-          <option value="">-- Choose Fund --</option>
-          <option value="FundA">Fund A</option>
-          <option value="FundB">Fund B</option>
-          <option value="FundC">Fund C</option>
-        </select>
-      </div>
-    </div>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>📋 Register Chit Fund</DialogTitle>
+      <DialogContent>
+        <Box mt={2}>
+          <TextField
+            fullWidth
+            label="Chit Fund Name"
+            variant="outlined"
+            value={fundName}
+            onChange={(e) => setFundName(e.target.value)}
+          />
+        </Box>
+        <Box mt={3} display="flex" justifyContent="flex-end">
+          <Button onClick={onClose} sx={{ mr: 2 }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={!fundName.trim()}
+          >
+            Register
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 };
 

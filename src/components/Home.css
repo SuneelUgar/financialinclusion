@@ -1,138 +1,52 @@
 body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #f0f4f8, #d9e4f5);
-  }
-  
-  .home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;     /* 👈 allows children to span full screen */
-  }
-  .app-bar {
-    position: relative;
-    height: 80px;
-    width: 100%;
-    background-color: #3183e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .app-title {
-    font-size: 26px;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    flex: 1;
-  }
-  
-  .app-logo {
-    position: absolute;
-    right: 80px;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 75px;         /* Increased from 40px */
-    width: auto;
-    max-width: 70px;      /* Optional: allow it to scale wider */
-    object-fit: contain;
-  }
-  
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f0f4f8, #d9e4f5);
+}
 
-  /* Wrap the title so it can center independently */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  /* 👈 allows children to span full screen */
+}
+
+.app-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  flex: 1;
+}
+
+.app-logo {
+  height: 75px;
+  /* Increased from 40px */
+  width: auto;
+  max-width: 70px;
+  /* Optional: allow it to scale wider */
+  object-fit: scale-down;
+}
+
+
+/* Wrap the title so it can center independently */
 .title-wrapper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    text-align: center;
-    pointer-events: none; /* so logo clicks work */
-  }
-  
-  
-  .button-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    padding: 40px 0; /* Add vertical spacing */
-  }
-  
-  
-  .nav-button {
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: 500;
-    color: white;
-    background: #007bff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 240px;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3);
-  }
-  
-  .nav-button:hover {
-    background: #0056b3;
-    transform: translateY(-2px);
-  }
-  
-  .fund-list-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    padding: 30px 20px;
-    background-color: #ffffffdd;
-    border-top: 2px solid #007bff;
-    border-radius: 12px;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
-  }
-  
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+  /* so logo clicks work */
+}
 
-  
-  
-  .fund-list-section h3 {
-    font-size: 24px;
-    color: #1a3c66;
-    font-weight: 700;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #3183e0;
-    padding-bottom: 10px;
-  }
-  
-  .fund-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    max-width: 500px;
-  }
-  
-  
-  .fund-item {
-    background-color: #e8f0fe;
-    padding: 16px 24px;
-    margin: 12px 0;
-    border-radius: 10px;
-    font-size: 18px;
-    color: #2c3e50;
-    font-weight: 600;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
-    transition: transform 0.2s ease, background-color 0.3s ease;
-    border-left: 5px solid #007bff;
-  }
-  
-  .fund-item:hover {
-    background-color: #e1ecff;
-  }
-  
+
+.button-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  padding: 40px 0;
+  /* Add vertical spacing */
+}
