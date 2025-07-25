@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -15,37 +15,55 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
+  CircularProgress,
 } from "@mui/material";
+import axios from "axios";
 import RegisterChitFund from "./RegisterChitFund";
 import RegisterUser from "./RegisterUser";
-
 
 const Home = () => {
   const navigate = useNavigate();
   const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
-
-  const funds = [
-    { id: 1, name: "Alpha Chit Fund" },
-    { id: 2, name: "Beta Chit Group" },
-    { id: 3, name: "Gamma Finance Club" },
-  ];
-
-  const goToParticipants = (id) => {
-    navigate(`/participants`);
-  };
-
-  const handleRegisterFund = (fundName) => {
-    console.log("Registered:", fundName);
-    // Optionally add to funds list or send to backend
-  };
-
   const [openRegisterUser, setOpenRegisterUser] = useState(false);
+  const [funds, setFunds] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadFunds = async () => {
+  setLoading(true);
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND}/funds/getAllFunds`);
+    const fundNames = response.data;
+
+    // Convert strings to objects with unique IDs
+    const formattedFunds = fundNames.map((name, index) => ({
+      id: index + 1, // Or use a UUID if you prefer
+      name,
+    }));
+
+    setFunds(formattedFunds);
+  } catch (error) {
+    console.error("Error fetching funds:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  useEffect(() => {
+    loadFunds();
+  }, []);
+
+  const goToParticipants = (name) => {
+    navigate(`/participants?name=${name}`);
+  };
+
+  const handleRegisterFund = () => {
+    // Do nothing — just used to conform to props
+  };
 
   const handleRegisterUser = (user) => {
     console.log("User registered:", user);
-    // Optionally add to a user list or send to backend
   };
-
 
   return (
     <>
@@ -89,42 +107,55 @@ const Home = () => {
             Registered Chit Funds
           </Typography>
 
-          <List>
-            {funds.map((fund) => (
-              <ListItem key={fund.id} disablePadding>
-                <ListItemButton onClick={() => goToParticipants(fund.id)}>
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      width: "100%",
-                      backgroundColor: "#e8f0fe",
-                      ":hover": { backgroundColor: "#e1ecff" },
-                    }}
-                  >
-                    <CardContent>
-                      <ListItemText
-                        primary={fund.name}
-                        primaryTypographyProps={{
-                          fontSize: 18,
-                          fontWeight: 600,
-                          color: "#2c3e50",
+          {loading ? (
+            <Box display="flex" justifyContent="center" mt={4}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <List>
+              {funds.length === 0 ? (
+                <Typography textAlign="center" mt={2}>
+                  No chit funds registered.
+                </Typography>
+              ) : (
+                funds.map((fund) => (
+                  <ListItem key={fund.id} disablePadding>
+                    <ListItemButton onClick={() => goToParticipants(fund.name)}>
+                      <Card
+                        variant="outlined"
+                        sx={{
+                          width: "100%",
+                          backgroundColor: "#e8f0fe",
+                          ":hover": { backgroundColor: "#e1ecff" },
                         }}
-                      />
-                    </CardContent>
-                  </Card>
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+                      >
+                        <CardContent>
+                          <ListItemText
+                            primary={fund.name}
+                            primaryTypographyProps={{
+                              fontSize: 18,
+                              fontWeight: 600,
+                              color: "#2c3e50",
+                            }}
+                          />
+                        </CardContent>
+                      </Card>
+                    </ListItemButton>
+                  </ListItem>
+                ))
+              )}
+            </List>
+          )}
         </Paper>
       </Container>
 
-      {/* Register Dialog (Separate Component) */}
       <RegisterChitFund
         open={openRegisterDialog}
         onClose={() => setOpenRegisterDialog(false)}
         onSubmit={handleRegisterFund}
+        onSuccess={loadFunds}
       />
+
       <RegisterUser
         open={openRegisterUser}
         onClose={() => setOpenRegisterUser(false)}
