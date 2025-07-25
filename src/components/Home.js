@@ -54,6 +54,7 @@ const Home = () => {
   }, []);
 
   const goToParticipants = (name) => {
+    console.log(2)
     navigate(`/participants?name=${name}`);
   };
 
