@@ -18,7 +18,10 @@ const CurrentParticipants = () => {
   const [loanedAmount, setLoanedAmount] = useState(0);
   const [topContributors, setTopContributors] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ user: "", account: "", type: "" });
+  const [formData, setFormData] = useState({ user: "", amount: "" });
+  // New states for add participant modal
+  const [showAddParticipantModal, setShowAddParticipantModal] = useState(false);
+  const [newParticipant, setNewParticipant] = useState("");
 
   useEffect(() => {
     if (!fundName) return;
@@ -47,11 +50,30 @@ const CurrentParticipants = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData);
+  const handleSubmit = async () => {
+  if (!formData.user.trim() || !formData.amount) {
+    alert("Please fill user and amount");
+    return;
+  }
+
+  try {
+    const url = `${process.env.REACT_APP_BACKEND}/transactions/addTransaction`;
+    await axios.post(url, {
+      transactionAmount: Number(formData.amount), // convert string to number
+  userName: formData.user.trim(),
+  fundName,
+    });
+
+    alert("Transaction added successfully");
+
+    // Optionally refresh fund data or update state here
     setShowModal(false);
-    setFormData({ user: "", account: "", type: "" });
-  };
+    setFormData({ user: "", amount: "" });
+  } catch (error) {
+    console.error("Error adding transaction:", error);
+    alert("Failed to add transaction");
+  }
+};
 
   const goToUserTrans = (userName) => {
     navigate("/user", { state: { userName } });
@@ -90,6 +112,12 @@ const CurrentParticipants = () => {
               </div>
             ))}
           </div>
+          <button
+            className="red"
+            onClick={() => setShowAddParticipantModal(true)}
+          >
+            + Add Participant
+          </button>
         </div>
 
         {/* Summary */}
@@ -125,29 +153,21 @@ const CurrentParticipants = () => {
           <div className="bg-white text-gray-800 rounded-xl p-6 w-full max-w-md shadow-2xl">
             <h3 className="text-lg font-semibold mb-4">Add Transaction</h3>
             <input
-              type="text"
-              name="user"
-              placeholder="User"
-              value={formData.user}
-              onChange={handleChange}
-              className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
-            />
-            <input
-              type="text"
-              name="account"
-              placeholder="Account"
-              value={formData.account}
-              onChange={handleChange}
-              className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
-            />
-            <input
-              type="text"
-              name="type"
-              placeholder="Type"
-              value={formData.type}
-              onChange={handleChange}
-              className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
-            />
+  type="text"
+  name="user"
+  placeholder="User"
+  value={formData.user}
+  onChange={handleChange}
+  className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+/>
+<input
+  type="number"
+  name="amount"
+  placeholder="Amount"
+  value={formData.amount}
+  onChange={handleChange}
+  className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+/>
             <div className="flex justify-end space-x-2">
               <button
                 className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg"
@@ -156,11 +176,55 @@ const CurrentParticipants = () => {
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-                onClick={handleSubmit}
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+  onClick={handleSubmit}
+>
+  Submit
+</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showAddParticipantModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white text-gray-800 rounded-xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 className="text-lg font-semibold mb-4">Add New Participant</h3>
+            <input
+              type="text"
+              placeholder="Participant Name"
+              value={newParticipant}
+              onChange={(e) => setNewParticipant(e.target.value)}
+              className="w-full mb-3 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg"
+                onClick={() => setShowAddParticipantModal(false)}
               >
-                Submit
+                Cancel
               </button>
+              <button
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+  disabled={!newParticipant.trim()}
+  onClick={async () => {
+    const url = `${process.env.REACT_APP_BACKEND}/funds/addUserToFund`;
+    console.log("POST to:", url); // Log the full backend URL
+    try {
+      await axios.post(url, {
+        name: newParticipant.trim(),
+        fname: fundName,
+      });
+      setMembers([...members, newParticipant.trim()]);
+      setNewParticipant("");
+      setShowAddParticipantModal(false);
+    } catch (err) {
+      console.error("Failed to add participant:", err);
+      alert("Error adding participant.");
+    }
+  }}
+>
+  Add
+</button>
             </div>
           </div>
         </div>
